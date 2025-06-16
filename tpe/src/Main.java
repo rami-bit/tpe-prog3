@@ -22,7 +22,7 @@ public class Main {
         System.out.println("Solución obtenida (del tipo Numero maquina/Cuantas Veces Aparece): " + solucionGreedy);
         int puestasFuncionamientoGreedy = solucionGreedy.values().stream().mapToInt(Integer::intValue).sum();
          System.out.println("Piezas Producidas -> "+ e.getTotalPiezasAproducir() + " || " + "Maquinas puestas en funcionamiento: "+ puestasFuncionamientoGreedy);
-        System.out.println(e.getCantCandidatosSeleccionados());
+        System.out.println("Cantidad de candidatos elegidos: " + e.getCantCandidatosSeleccionados());
     }
 
     public static Fabrica construirEmpresa() {
