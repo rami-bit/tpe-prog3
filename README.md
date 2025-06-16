@@ -34,3 +34,7 @@ Si necesitamos producir 12 piezas una configuración óptima posible sería [M1 
 ├── 📁 data                 # Archivos de datos
 │   ├── 📄 prueba.txt       # Archivo de prueba para la ejecución del programa
 ```
+
+### Resultado para el ejemplo adjuntado (prueba.txt)
+
+![image](https://github.com/user-attachments/assets/4a89ec13-8bc3-4297-9206-f88198dc940b)
