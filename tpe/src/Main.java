@@ -31,7 +31,7 @@ public class Main {
         boolean esPrimerLinea = true;
         System.out.println(new File(".").getAbsolutePath());
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(".\\tpe\\data\\prueba.txt"))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(".\\data\\prueba.txt"))){
             String line;
             while ((line = reader.readLine()) != null) {
                 if (esPrimerLinea) {
