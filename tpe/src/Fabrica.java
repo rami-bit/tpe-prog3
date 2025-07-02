@@ -48,7 +48,8 @@ public class Fabrica {
      * (piezasTotales),
      * verifico si la solución parcial actual es mejor que la mejor solución
      * encontrada hasta el momento.
-     * En este caso, considero "mejor" a la que usa menor cantidad total de maquinas.
+     * En este caso, considero "mejor" a la que usa menor cantidad total de
+     * maquinas.
      * Si lo es, reemplazo la solución guardada.
      * 
      * Podas:
@@ -58,6 +59,18 @@ public class Fabrica {
      * máquinas que esa, corto también,
      * porque aunque llegue a una solución válida, no será mejor que la ya
      * encontrada.
+     * 
+     * Reentrega: la verificación que hacia antes en el principio del método de
+     * verificar si me paso de piezas a producir
+     * ya que esta generaba llamados innecesarios cuando yo podría haber podado
+     * antes.
+     * Ahora como poda "nueva" tengo :
+     * Recorro la maxima cantidad de veces de cuantas maquinas puedo usar mientras
+     * la suma de las piezas no superen a las que tengo que producir, y si la suma
+     * parcial de piezas producidas es mayor o igual a la mejor solución encontrada
+     * hasta el momento, continuo y la agrego a la solucion. En cambio si me paso en
+     * vez de generar un llamado para checar esto lo que hago es cortar la rama sin
+     * generar un estado nuevo.
      * 
      */
     public HashMap<String, Integer> solucionBackracking() {
@@ -76,10 +89,6 @@ public class Fabrica {
     private void backtracking(HashMap<String, Integer> sol, int sumaParcial, HashMap<String, Integer> solparcial,
             int indice) {
         this.incrementarLLamadas();
-
-        if (sumaParcial > getTotalPiezasAproducir()) {
-            return;
-        }
         /*
          * Aca lo siguiente que hago es porque antes al Comparar el tamaño del HashMap
          * no era lo correcto, porque solo dice cuántos tipos distintos de máquinas uso,
@@ -113,11 +122,14 @@ public class Fabrica {
         } else {
             for (int i = indice; i < maquinas.size(); i++) {
                 Maquina m = maquinas.get(i);
-                int vecesEntra = cuantasVecesEntra(getTotalPiezasAproducir() - sumaParcial, m.getPiezas());
-                
-                if (vecesEntra > 0) {
-                    solparcial.put(m.getnMaquina(), vecesEntra);
-                    backtracking(sol, sumaParcial + (m.getPiezas() * vecesEntra), solparcial, i + 1);
+                int maxVeces = cuantasVecesEntra(getTotalPiezasAproducir() - sumaParcial, m.getPiezas());
+                for (int veces = 1; veces <= maxVeces; veces++) {
+                    int nuevaSuma = sumaParcial + veces * m.getPiezas();
+                    if (nuevaSuma > getTotalPiezasAproducir()) {
+                        return; // podo si me paso
+                    }
+                    solparcial.put(m.getnMaquina(), veces);
+                    backtracking(sol, nuevaSuma, solparcial, i + 1);
                     solparcial.remove(m.getnMaquina());
                 }
             }
@@ -144,7 +156,7 @@ public class Fabrica {
      * - Si encuentro una máquina válida, calculo cuántas veces entra y la agrego a
      * la solución.
      * - Si no hay ninguna máquina que pueda seguir entrando, corto el ciclo y
-     * retorno lo que armé hasta ahora.
+     * retorno null (no hay solución para greedy).
      *
      */
 
@@ -173,10 +185,10 @@ public class Fabrica {
                 sol.put(m.getnMaquina(), cuantasVecesEntra);
                 piezasProducidas += (m.getPiezas() * cuantasVecesEntra);
             } else {
-                return sol;
+                return null;
             }
         }
         return sol;
     }
-    //</Greedy>/////////////////
+    // </Greedy>/////////////////
 }
