@@ -61,16 +61,20 @@ public class Fabrica {
      * encontrada.
      * 
      * Reentrega: la verificación que hacia antes en el principio del método de
-     * verificar si me paso de piezas a producir
-     * ya que esta generaba llamados innecesarios cuando yo podría haber podado
-     * antes.
-     * Ahora como poda "nueva" tengo :
-     * Recorro la maxima cantidad de veces de cuantas maquinas puedo usar mientras
-     * la suma de las piezas no superen a las que tengo que producir, y si la suma
-     * parcial de piezas producidas es mayor o igual a la mejor solución encontrada
-     * hasta el momento, continuo y la agrego a la solucion. En cambio si me paso en
-     * vez de generar un llamado para checar esto lo que hago es cortar la rama sin
-     * generar un estado nuevo.
+     * verificar si me paso de piezas a producir era inefciente ya que esta generaba 
+     * llamados innecesarios cuando yo podría haber podado antes.
+     * Ahora como voy construyendo la solucion es asi : Recorro cada maquina y por
+     * cada maquina, recorro la maxima cantidad de veces que puedo usar la misma.En lugar de como antes que
+     * agregaba directamente la cantidad posible de una maquina, dentro de este bucle recorro todas las posibilidades
+     * desde 1 hasta ese maximo (llamando recursivamente al metodo). 
+     * Si la suma de piezas que puedo producir se pasa de las que tengo que producir dentro de este bucle 
+     * corto la rama sin tener que generar un salto mas de recursion.
+     * Y por ultimo ordeno las maquinas de mayor a menor cantidad de piezas que
+     * pueden producir antes de entrar al backtracking ya que en general
+     * provee una mejor eficiencia que no tenerlo, mas en casos donde la respuesta
+     * se encuentra en las maquinas que pueden producir muchas piezas.
+     * 
+     * 
      * 
      */
     public HashMap<String, Integer> solucionBackracking() {
@@ -158,13 +162,23 @@ public class Fabrica {
      * la solución.
      * - Si no hay ninguna máquina que pueda seguir entrando, corto el ciclo y
      * retorno null (no hay solución para greedy).
+     * 
+     * 
+     * 
+     * Reentrega:
+     * Ahora para no volver a recorrer por las mismas maquinas borro la maquina que ya eleji
+     * por que se que no la voy a elegir en un futuro, ademas de la estrategía que tengo de añadir todas
+     * las maquinas que entran en la solución.
      *
      */
 
     public Maquina mejorMaquina(int piezasDisp) {
+        Maquina mejor;
         for (Maquina maquina : maquinas) {
             if (maquina.getPiezas() <= piezasDisp) {
-                return maquina; // está ordenado de mayor a menor, así que esta es la mejor posible
+                mejor = maquina;
+                maquinas.remove(maquina); // la saco de la lista para no volver a usarla
+                return mejor; // está ordenado de mayor a menor, así que esta es la mejor posible
             }
         }
         return null; // ninguna entra
