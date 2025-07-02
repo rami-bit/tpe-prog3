@@ -78,6 +78,7 @@ public class Fabrica {
             return null;
         }
         HashMap<String, Integer> sol = new HashMap<>();
+        maquinas.sort(new ComparadorInt());
         backtracking(sol, 0, new HashMap<>(), 0);
         return sol;
     }
